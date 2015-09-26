@@ -14,16 +14,28 @@ class Window;
 
 class Window : public QMainWindow
 {
+
     Q_OBJECT
+public:
+
     #ifdef Q_OS_WIN32
-        winapi *g;
+        winapi * g;
     #elif defined(Q_OS_MACOSX)
-        winapi *g;
+        winapi * g;
     #else
-        xlib *g;
+        xlib * g;
     #endif
 
-public:
+    static QList<uint> keyboardActivity;
+    static QList<uint> mouseActivity;
+
+
+    static void addActivity(bool keyboard, uint unixTime);
+    static uint lastMouseActivity();
+    static QList<uint> getMouseActivity();
+    static QList<uint> getKeyboardActivity();
+
+
     explicit Window(QWidget *parent = 0);
     ~Window();
 
@@ -39,6 +51,7 @@ private slots:
 private:
     Ui::Window *ui;
     screenshot* s;
+
 };
 
 #endif // WINDOW_H

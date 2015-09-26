@@ -3,6 +3,7 @@
 
 #include "grabber.h"
 #include <QProcess>
+#include <QObject>
 
 class xlib : public grabber
 {
@@ -14,6 +15,7 @@ public:
     QString grabActiveWindow();
     void startKeyboardMouseCapture();
     void stopKeyboardMouseCapture();
+
 
 signals:
 

@@ -12,6 +12,8 @@ TARGET = MoneyTrackDesktop
 TEMPLATE = app
 
 
+win32:LIBS += -L"$$_PRO_FILE_PWD_/" -lpsapi
+
 SOURCES += main.cpp\
         window.cpp \
     screenshot.cpp \
@@ -25,4 +27,6 @@ HEADERS  += window.h \
     winapi.h \
     xlib.h
 
-FORMS    += window.ui
+
+FORMS    += window.ui \
+    mainwindow.ui

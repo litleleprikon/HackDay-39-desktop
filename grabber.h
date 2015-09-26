@@ -15,9 +15,6 @@ public:
     virtual void startKeyboardMouseCapture() = 0;
     virtual void stopKeyboardMouseCapture() = 0;
 
-    QList<long> *keyboardActivity;
-    QList<long> *mouseActivity;
-
 signals:
 
 public slots:

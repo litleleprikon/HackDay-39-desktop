@@ -1,4 +1,5 @@
 #include "xlib.h"
+#include "window.h"
 
 #include <QPixmap>
 #include <QDateTime>
@@ -7,12 +8,10 @@
 #include <QProcess>
 #include <QDebug>
 #include <QRegExp>
+#include <QApplication>
 
 xlib::xlib()
 {
-    this->keys_pressed = 0;
-    this->keyboardActivity = new QList<long>;
-    this->mouseActivity = new QList<long>;
 }
 
 QString xlib::makeScreenshot()
@@ -40,7 +39,7 @@ QString xlib::makeScreenshot()
 QString xlib::grabActiveWindow()
 {
     /// xdotool required for Linux
-    QProcess *process = new QProcess(this);
+    QProcess *process = new QProcess(QApplication::instance());
     QString cmd = "xdotool getwindowfocus getwindowpid";
     QString pid;
     process->start(cmd);
@@ -68,8 +67,8 @@ void xlib::startKeyboardMouseCapture()
 void xlib::stopKeyboardMouseCapture()
 {
     keycapture->kill();
-    keyboardActivity->clear();
-    mouseActivity->clear();
+    Window::keyboardActivity.clear();
+    Window::mouseActivity.clear();
 
 }
 
@@ -86,21 +85,21 @@ void xlib::parseOutput()
     {
         case 3:
         case 14:
-            keyboardActivity->push_back(unixTime);
+            Window::addActivity(true, unixTime);
         break;
         case 5:
         case 16:
-            mouseActivity->push_back(unixTime);
+            Window::addActivity(false, unixTime);
         break;
         case 6:
         case 17:
-            if (!mouseActivity->isEmpty())
+            if (!Window::mouseActivity.isEmpty())
             {
-                if (mouseActivity->last() != unixTime) {
-                    mouseActivity->push_back(unixTime);
+                if (Window::lastMouseActivity() != unixTime) {
+                    Window::addActivity(false, unixTime);
                 }
             }
-            else { mouseActivity->push_back(unixTime);}
+            else { Window::addActivity(false, unixTime);}
         break;
     }
 }
